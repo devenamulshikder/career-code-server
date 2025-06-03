@@ -19,6 +19,8 @@ async function run() {
   try {
     await client.connect();
 
+    // DB_USER=career_db_Admin
+    // DB_PASSWORD=2iXkpXCPVHMCfvFi
     const jobsCollection = client.db("careerCode").collection("jobs");
     const applicationsCollection = client
       .db("careerCode")
