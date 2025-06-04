@@ -25,10 +25,25 @@ async function run() {
     const applicationsCollection = client
       .db("careerCode")
       .collection("applications");
+    //jobs api
     app.get("/jobs", async (req, res) => {
-      const result = await jobsCollection.find().toArray();
+
+      const email = req.query.email;
+      const query = {}
+      if(email){
+        query.hr_email = email;
+      }
+      const result = await jobsCollection.find(query).toArray();
       res.send(result);
     });
+
+    // could be done but should be not done.
+    // app.get("/jobsByEmailAddress", async (req, res) => {
+    //   const email = req.query.email;
+    //   const query = { hr_email: email };
+    //   const result = await jobsCollection.find(query).toArray();
+    //   res.send(result);
+    // });
 
     app.get("/jobs/:id", async (req, res) => {
       const id = req.params.id;
