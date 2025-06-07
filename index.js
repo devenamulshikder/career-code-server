@@ -20,10 +20,20 @@ const logger = (req, res, next) => {
   next();
 };
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async(req, res, next) => {
   const token = req?.cookies?.token;
   console.log("cookie in the middleware", token);
-  next();
+  if (!token) {
+    return res.status(401).send({ message: "unauthorized access" });
+  }
+  // veryfied token
+  jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: "unauthorized access" });
+    }
+    req.decoded = decoded;
+    next();
+  });
 };
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.shu503b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -95,6 +105,9 @@ async function run() {
     app.get("/applications", logger, verifyToken, async (req, res) => {
       const email = req.query.email;
       // console.log("inside applications api", req.cookies);
+      if(email !== req.decoded.email){
+        return res.status(403).send({message: 'forbidden access'})
+      }
       const query = { applicant: email };
       const result = await applicationsCollection.find(query).toArray();
       // bad ways
