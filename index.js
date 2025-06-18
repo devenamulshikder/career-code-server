@@ -102,12 +102,12 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/applications", logger, verifyToken, async (req, res) => {
+    app.get("/applications", async (req, res) => {
       const email = req.query.email;
       // console.log("inside applications api", req.cookies);
-      if(email !== req.decoded.email){
-        return res.status(403).send({message: 'forbidden access'})
-      }
+      // if(email !== req.decoded.email){
+      //   return res.status(403).send({message: 'forbidden access'})
+      // }
       const query = { applicant: email };
       const result = await applicationsCollection.find(query).toArray();
       // bad ways
