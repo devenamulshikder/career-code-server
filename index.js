@@ -46,7 +46,7 @@ const client = new MongoClient(uri, {
 });
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     // DB_USER=career_db_Admin
     // DB_PASSWORD=2iXkpXCPVHMCfvFi
@@ -155,7 +155,7 @@ async function run() {
       res.send(result);
     });
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
